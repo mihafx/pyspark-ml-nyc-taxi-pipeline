@@ -21,58 +21,49 @@ Key highlights:
 
 ## 🏗 Architecture
 
-  +----------------------+
-  |   NYC Taxi Dataset   |
-  |   (Parquet / CSV)    |
-  +----------+-----------+
-             |
-             v
-   +------------------+
-   |   Data Ingestion |
-   |   PySpark ETL    |
-   +------------------+
-             |
-             v
-  +-------------------------+
-  |  Feature Engineering    |
-  |  - temporal features    |
-  |  - cyclical encoding    |
-  |  - traffic features     |
-  |  - feature interactions |
-  +----------+--------------+
-             |
-             v
-  +----------------------+
-  |   Train/Test Split   |
-  |       80 / 20        |
-  +----------+-----------+
-             |
-             v
- +-----------------------+
- | Hyperparameter Search |
- | TrainValidationSplit  |
- | 18 parameter configs  |
- +----------+------------+
-            |
-            v
-   +------------------+
-   |  GBTRegressor    |
-   | PySpark MLlib    |
-   +--------+---------+
-            |
-            v
-   +------------------+
-   | Model Evaluation |
-   | RMSE / MAE / R²  |
-   +--------+---------+
-            |
-            v
-   +--------------------+
-   | Model Artifacts    |
-   | Spark ML Model     |
-   | Feature Importance |
-   +--------------------+
-
+```
++-------------------+
+|  Data Ingestion   |
+| (Parquet / API)   |
++-------------------+
+           |
+           v
++-------------------+
+|   ETL & FE        |
+| (filtering,       |
+| time & cyclical   |
+| features,         |
+| interactions)     |
++-------------------+
+           |
+           v
++-------------------+
+|  Train/Test Split |
+|   (80% / 20%)    |
++-------------------+
+           |
+           v
++-------------------+
+| Hyperparameter    |
+| Tuning (TVS)      |
+| 18 param combos   |
++-------------------+
+           |
+           v
++-------------------+
+| ML Pipeline (GBT) |
+| StringIndexer,    |
+| VectorAssembler,  |
+| GBTRegressor      |
++-------------------+
+           |
+           v
++-------------------+
+| Evaluation &      |
+| Feature Importance|
+| RMSE, MAE, R²     |
++-------------------+
+```
 
 ---
 
