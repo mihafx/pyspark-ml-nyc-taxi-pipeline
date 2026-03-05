@@ -21,31 +21,57 @@ Key highlights:
 
 ## 🏗 Architecture
 
-
-+-------------------+ +------------------+ +----------------+
-| Data Ingestion | ---> | ETL & FE | ---> | ML Pipeline |
-| (Parquet files / | | (filtering, | | StringIndexer, |
-| NYC TLC API) | | time features, | | VectorAssembler|
-+-------------------+ | cyclical, | | GBTRegressor) |
-| interaction) | +----------------+
-+------------------+
-|
-v
-+------------------+
-| Train/Test Split |
-+------------------+
-|
-v
-+------------------+
-| Hyperparameter |
-| Tuning (TVS) |
-+------------------+
-|
-v
-+------------------+
-| Evaluation & |
-| Feature Importance|
-+------------------+
+  +----------------------+
+  |   NYC Taxi Dataset   |
+  |   (Parquet / CSV)    |
+  +----------+-----------+
+             |
+             v
+   +------------------+
+   |   Data Ingestion |
+   |   PySpark ETL    |
+   +------------------+
+             |
+             v
+  +-------------------------+
+  |  Feature Engineering    |
+  |  - temporal features    |
+  |  - cyclical encoding    |
+  |  - traffic features     |
+  |  - feature interactions |
+  +----------+--------------+
+             |
+             v
+  +----------------------+
+  |   Train/Test Split   |
+  |       80 / 20        |
+  +----------+-----------+
+             |
+             v
+ +-----------------------+
+ | Hyperparameter Search |
+ | TrainValidationSplit  |
+ | 18 parameter configs  |
+ +----------+------------+
+            |
+            v
+   +------------------+
+   |  GBTRegressor    |
+   | PySpark MLlib    |
+   +--------+---------+
+            |
+            v
+   +------------------+
+   | Model Evaluation |
+   | RMSE / MAE / R²  |
+   +--------+---------+
+            |
+            v
+   +--------------------+
+   | Model Artifacts    |
+   | Spark ML Model     |
+   | Feature Importance |
+   +--------------------+
 
 
 ---
